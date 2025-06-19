@@ -1,59 +1,76 @@
 blueprint:
-  name: Tuya TS0044 4-Button Switch
-  description: Automation for the Tuya TS0044 Zigbee 4-button switch via Zigbee2MQTT
+  name: Tuya TS0044 4-Button Switch (Z2M)
+  description: Use single presses of each button on the Tuya TS0044 Zigbee switch to trigger actions.
   domain: automation
   input:
-    switch_device:
-      name: TS0044 Device
+    ts0044_device:
+      name: TS0044 Switch
       selector:
         device:
           integration: mqtt
     button_1_single:
-      name: Button 1 Single Press Action
+      name: Action for Button 1 Single Press
       default: []
       selector:
         action: {}
     button_2_single:
-      name: Button 2 Single Press Action
+      name: Action for Button 2 Single Press
       default: []
       selector:
         action: {}
     button_3_single:
-      name: Button 3 Single Press Action
+      name: Action for Button 3 Single Press
       default: []
       selector:
         action: {}
     button_4_single:
-      name: Button 4 Single Press Action
+      name: Action for Button 4 Single Press
       default: []
       selector:
         action: {}
-  source_url: https://gist.github.com/example
 
 trigger:
-  - platform: event
-    event_type: mqtt_message
-    event_data:
-      topic: zigbee2mqtt/{device_id}/action
-
-variables:
-  device_id: !input switch_device
+  - platform: device
+    domain: mqtt
+    device_id: !input ts0044_device
+    type: action
+    subtype: 1_single
+    id: button_1
+  - platform: device
+    domain: mqtt
+    device_id: !input ts0044_device
+    type: action
+    subtype: 2_single
+    id: button_2
+  - platform: device
+    domain: mqtt
+    device_id: !input ts0044_device
+    type: action
+    subtype: 3_single
+    id: button_3
+  - platform: device
+    domain: mqtt
+    device_id: !input ts0044_device
+    type: action
+    subtype: 4_single
+    id: button_4
 
 action:
   - choose:
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.event.data.payload == '1_single' }}"
+          - condition: trigger
+            id: button_1
         sequence: !input button_1_single
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.event.data.payload == '2_single' }}"
+          - condition: trigger
+            id: button_2
         sequence: !input button_2_single
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.event.data.payload == '3_single' }}"
+          - condition: trigger
+            id: button_3
         sequence: !input button_3_single
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.event.data.payload == '4_single' }}"
+          - condition: trigger
+            id: button_4
         sequence: !input button_4_single
+mode: single
