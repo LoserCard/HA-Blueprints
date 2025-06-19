@@ -1,8 +1,8 @@
 blueprint:
   name: Tuya TS0044 4-Button Switch (Z2M)
   description: >
-    Use single presses of each button on the Tuya TS0044 Zigbee switch to trigger actions.
-    Supports reliable rapid presses using queued mode.
+    Supports single press, double press, and hold actions for the Tuya TS0044 Zigbee switch via Zigbee2MQTT.
+    Uses queued mode to handle rapid presses reliably.
   domain: automation
   input:
     ts0044_device:
@@ -10,71 +10,213 @@ blueprint:
       selector:
         device:
           integration: mqtt
+
+    # Button 1
     button_1_single:
-      name: Action for Button 1 Single Press
+      name: Button 1 Single Press Action
       default: []
       selector:
         action: {}
+    button_1_double:
+      name: Button 1 Double Press Action
+      default: []
+      selector:
+        action: {}
+    button_1_hold:
+      name: Button 1 Hold Action
+      default: []
+      selector:
+        action: {}
+
+    # Button 2
     button_2_single:
-      name: Action for Button 2 Single Press
+      name: Button 2 Single Press Action
       default: []
       selector:
         action: {}
+    button_2_double:
+      name: Button 2 Double Press Action
+      default: []
+      selector:
+        action: {}
+    button_2_hold:
+      name: Button 2 Hold Action
+      default: []
+      selector:
+        action: {}
+
+    # Button 3
     button_3_single:
-      name: Action for Button 3 Single Press
+      name: Button 3 Single Press Action
       default: []
       selector:
         action: {}
+    button_3_double:
+      name: Button 3 Double Press Action
+      default: []
+      selector:
+        action: {}
+    button_3_hold:
+      name: Button 3 Hold Action
+      default: []
+      selector:
+        action: {}
+
+    # Button 4
     button_4_single:
-      name: Action for Button 4 Single Press
+      name: Button 4 Single Press Action
+      default: []
+      selector:
+        action: {}
+    button_4_double:
+      name: Button 4 Double Press Action
+      default: []
+      selector:
+        action: {}
+    button_4_hold:
+      name: Button 4 Hold Action
       default: []
       selector:
         action: {}
 
 trigger:
+  # Button 1
   - platform: device
     domain: mqtt
     device_id: !input ts0044_device
     type: action
     subtype: 1_single
-    id: button_1
+    id: button_1_single
+  - platform: device
+    domain: mqtt
+    device_id: !input ts0044_device
+    type: action
+    subtype: 1_double
+    id: button_1_double
+  - platform: device
+    domain: mqtt
+    device_id: !input ts0044_device
+    type: action
+    subtype: 1_hold
+    id: button_1_hold
+
+  # Button 2
   - platform: device
     domain: mqtt
     device_id: !input ts0044_device
     type: action
     subtype: 2_single
-    id: button_2
+    id: button_2_single
+  - platform: device
+    domain: mqtt
+    device_id: !input ts0044_device
+    type: action
+    subtype: 2_double
+    id: button_2_double
+  - platform: device
+    domain: mqtt
+    device_id: !input ts0044_device
+    type: action
+    subtype: 2_hold
+    id: button_2_hold
+
+  # Button 3
   - platform: device
     domain: mqtt
     device_id: !input ts0044_device
     type: action
     subtype: 3_single
-    id: button_3
+    id: button_3_single
+  - platform: device
+    domain: mqtt
+    device_id: !input ts0044_device
+    type: action
+    subtype: 3_double
+    id: button_3_double
+  - platform: device
+    domain: mqtt
+    device_id: !input ts0044_device
+    type: action
+    subtype: 3_hold
+    id: button_3_hold
+
+  # Button 4
   - platform: device
     domain: mqtt
     device_id: !input ts0044_device
     type: action
     subtype: 4_single
-    id: button_4
+    id: button_4_single
+  - platform: device
+    domain: mqtt
+    device_id: !input ts0044_device
+    type: action
+    subtype: 4_double
+    id: button_4_double
+  - platform: device
+    domain: mqtt
+    device_id: !input ts0044_device
+    type: action
+    subtype: 4_hold
+    id: button_4_hold
 
 action:
   - choose:
+      # Button 1
       - conditions:
           - condition: trigger
-            id: button_1
+            id: button_1_single
         sequence: !input button_1_single
       - conditions:
           - condition: trigger
-            id: button_2
+            id: button_1_double
+        sequence: !input button_1_double
+      - conditions:
+          - condition: trigger
+            id: button_1_hold
+        sequence: !input button_1_hold
+
+      # Button 2
+      - conditions:
+          - condition: trigger
+            id: button_2_single
         sequence: !input button_2_single
       - conditions:
           - condition: trigger
-            id: button_3
+            id: button_2_double
+        sequence: !input button_2_double
+      - conditions:
+          - condition: trigger
+            id: button_2_hold
+        sequence: !input button_2_hold
+
+      # Button 3
+      - conditions:
+          - condition: trigger
+            id: button_3_single
         sequence: !input button_3_single
       - conditions:
           - condition: trigger
-            id: button_4
+            id: button_3_double
+        sequence: !input button_3_double
+      - conditions:
+          - condition: trigger
+            id: button_3_hold
+        sequence: !input button_3_hold
+
+      # Button 4
+      - conditions:
+          - condition: trigger
+            id: button_4_single
         sequence: !input button_4_single
+      - conditions:
+          - condition: trigger
+            id: button_4_double
+        sequence: !input button_4_double
+      - conditions:
+          - condition: trigger
+            id: button_4_hold
+        sequence: !input button_4_hold
 
 mode: queued
 max: 5
