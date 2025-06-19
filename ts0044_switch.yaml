@@ -1,0 +1,59 @@
+blueprint:
+  name: Tuya TS0044 4-Button Switch
+  description: Automation for the Tuya TS0044 Zigbee 4-button switch via Zigbee2MQTT
+  domain: automation
+  input:
+    switch_device:
+      name: TS0044 Device
+      selector:
+        device:
+          integration: mqtt
+    button_1_single:
+      name: Button 1 Single Press Action
+      default: []
+      selector:
+        action: {}
+    button_2_single:
+      name: Button 2 Single Press Action
+      default: []
+      selector:
+        action: {}
+    button_3_single:
+      name: Button 3 Single Press Action
+      default: []
+      selector:
+        action: {}
+    button_4_single:
+      name: Button 4 Single Press Action
+      default: []
+      selector:
+        action: {}
+  source_url: https://gist.github.com/example
+
+trigger:
+  - platform: event
+    event_type: mqtt_message
+    event_data:
+      topic: zigbee2mqtt/{device_id}/action
+
+variables:
+  device_id: !input switch_device
+
+action:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.payload == '1_single' }}"
+        sequence: !input button_1_single
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.payload == '2_single' }}"
+        sequence: !input button_2_single
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.payload == '3_single' }}"
+        sequence: !input button_3_single
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.payload == '4_single' }}"
+        sequence: !input button_4_single
