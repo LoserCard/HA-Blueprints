@@ -1,6 +1,8 @@
 blueprint:
   name: Tuya TS0044 4-Button Switch (Z2M)
-  description: Use single presses of each button on the Tuya TS0044 Zigbee switch to trigger actions.
+  description: >
+    Use single presses of each button on the Tuya TS0044 Zigbee switch to trigger actions.
+    Supports reliable rapid presses using queued mode.
   domain: automation
   input:
     ts0044_device:
@@ -73,4 +75,6 @@ action:
           - condition: trigger
             id: button_4
         sequence: !input button_4_single
-mode: single
+
+mode: queued
+max: 5
